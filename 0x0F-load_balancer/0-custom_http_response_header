@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # configures a brand new Ubuntu machine, Configure Nginx so that its HTTP response contains a custom header (on web-01 and web-02), custom HTTP header must be X-Served-By
 
-sudo apt update
-sudo apt-get -y install nginx
-sudo ufw allow 'Nginx HTTP'
-header="\t\tadd_header X-Served-By '$HOSTNAME';"
-sudo sed -i "31i\ $header" /etc/nginx/sites-enabled/default
+sudo apt-get update -y
+sudo apt-get install -y nginx
+sudo chmod -R 777 /var/www
+echo "Hello World!" > /var/www/html/index.html
+sudo service nginx start
+sudo sed -i 's/404;/404;add_header X-Served-By $hostname;/g' /etc/nginx/sites-available/default
 sudo service nginx restart
